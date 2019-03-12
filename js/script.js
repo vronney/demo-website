@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 "use strict";
 
 (function() {
@@ -15,7 +17,8 @@
 	let category = 'all';
 
 	// get weather data when user clicks Forecast button, then add temp & conditions to view
-	$('.forecast-button').click(function(e) {
+	// $('.forecast-button').click(function(e) {
+		document.querySelector('.forecast-button').addEventListener('click', function(e) {
 		e.preventDefault();
 		// const location = $('#location').val();
 		const location = document.querySelector('#location').value;
@@ -35,10 +38,13 @@
 		}).catch(function () {
 			updateUIFailure();
 		});
-	});
+	}, false);
 
 	// update list of sports when user selects a different category (solo/team/all)
-	$('.options div').on('click', updateActivityList);
+	// $('.options div').on('click', updateActivityList);
+	document.querySelectorAll('.options div').forEach(function(el) {
+		el.addEventListener('click', updateActivityList, false);
+	})
 
 	// handle ajax success
 	function updateUISuccess(response) {
@@ -74,22 +80,26 @@
 
 	// handle selection of a new category (team/solo/all) 
 	function updateActivityList(event) {
-		if (event !== undefined && $(this).hasClass('selected')) {
+		// if (event !== undefined && $(this).hasClass('selected')) {
+			if (event !== undefined && event.target.classList.contains('selected')) {
 			// if the 'event' parameter is defined, then a tab has been clicked; if not, then this is the
 			//   default case and the view simply needs to be updated
 			// if the clicked tab has the class 'selected', then no need to change location of 'selected' class
 			//   or change the DOM
 			return true;
-		} else if (event !== undefined && !$(this).hasClass('selected')) {
+		// } else if (event !== undefined && !$(this).hasClass('selected')) {
+			} else if (event !== undefined && !event.target.classList.contains('selected')) {
 			// if the 'event' parameter is defined, then a tab has been clicked
 			// if the clicked tab does not have the class 'selected', then location of 'selected' class must be added
 			//   to the clicked element and removed from its siblings
-			category = $(this).attr('id');
+			// category = $(this).attr('id');
+			category = event.target.id;
 			// $('.options div').removeClass('selected');
 			document.querySelectorAll('.options div').forEach(function(el) {
 				el.classList.remove('selected');
 			});
-			$(this).addClass('selected');
+			// $(this).addClass('selected');
+			event.target.classList.add('selected');
 		} 
 
 		state.activities = [];
